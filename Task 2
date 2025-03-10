@@ -1,0 +1,22 @@
+open System
+
+let summ n : int =
+    let rec sumHelper (num: int) (acc: int) : int =
+        if num = 0 then acc
+        else sumHelper (num / 10) (acc + (num % 10))
+    sumHelper n 0
+
+
+[<EntryPoint>]
+let main argv =
+    printfn "Введите натуральное число:"
+    let num = Console.ReadLine()
+
+    match Int32.TryParse(num) with
+    | (true, num) when num > 0 ->
+        let sum = summ num
+        printfn "Сумма цифр числа %d равна %d" num sum
+    | (false, _) ->
+        printfn "Введенное значение не является числом."
+
+    0
