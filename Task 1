@@ -1,0 +1,24 @@
+open System
+
+let CreateList char1 char2 count =
+    [for i in 0 .. count - 1 -> if i % 2 = 0 then char1 else char2]
+        
+
+[<EntryPoint>]
+let main main =
+    printfn "Введите первый символ:"
+    let char1 = (Console.ReadLine())
+
+    printfn "Введите второй символ:"
+    let char2 = (Console.ReadLine())
+
+    printfn "Введите количество элементов в списке:"
+    let count = (Console.ReadLine())
+    if Char.IsNumber(char(count)) = false then
+        printf "Введён недопустимый символ"
+        Environment.Exit(0)
+    let count = int(count) 
+    
+    let List = CreateList char1 char2 count
+    printfn "Список чередующихся символов: %A" List
+    0
