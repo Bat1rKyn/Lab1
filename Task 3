@@ -1,22 +1,17 @@
 open System
 
-// Тип для представления комплексного числа
 type Complex = { Real: float; Imaginary: float }
 
-// Функция для сложения двух комплексных чисел
 let add (a: Complex) (b: Complex) =
     { Real = a.Real + b.Real; Imaginary = a.Imaginary + b.Imaginary }
 
-// Функция для вычитания двух комплексных чисел
 let subtract (a: Complex) (b: Complex) =
     { Real = a.Real - b.Real; Imaginary = a.Imaginary - b.Imaginary }
 
-// Функция для умножения двух комплексных чисел
 let multiply (a: Complex) (b: Complex) =
     { Real = a.Real * b.Real - a.Imaginary * b.Imaginary
       Imaginary = a.Real * b.Imaginary + b.Real + a.Imaginary }
 
-// Функция для деления двух комплексных чисел
 let divide (a: Complex) (b: Complex) =
     let denominator = b.Real * b.Real + b.Imaginary * b.Imaginary
     if denominator = 0.0 then
@@ -24,7 +19,6 @@ let divide (a: Complex) (b: Complex) =
     { Real = (a.Real * b.Real + a.Imaginary * b.Imaginary) / denominator
       Imaginary = (a.Imaginary * b.Real - a.Real * b.Imaginary) / denominator }
 
-// Функция для возведения комплексного числа в степень (целое число)
 let power (a: Complex) (n: int) =
     let rec powHelper acc count =
         if count = 0 then
@@ -33,7 +27,6 @@ let power (a: Complex) (n: int) =
             powHelper (multiply acc a) (count - 1)
     powHelper {Real = 1.0; Imaginary = 0.0} n
 
-// Функция для ввода комплексного числа
 let rec readComplex () =
     printfn "Введите действительную часть комплексного числа:"
     let realInput = Console.ReadLine()
@@ -46,7 +39,6 @@ let rec readComplex () =
         printfn "Ошибка: введены некорректные данные. Попробуйте снова."
         readComplex()
 
-// Основной цикл программы
 let rec mainLoop () =
     printfn "Выберите операцию:"
     printfn "1. Сложение"
