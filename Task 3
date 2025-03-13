@@ -1,0 +1,96 @@
+open System
+
+// Тип для представления комплексного числа
+type Complex = { Real: float; Imaginary: float }
+
+// Функция для сложения двух комплексных чисел
+let add (a: Complex) (b: Complex) =
+    { Real = a.Real + b.Real; Imaginary = a.Imaginary + b.Imaginary }
+
+// Функция для вычитания двух комплексных чисел
+let subtract (a: Complex) (b: Complex) =
+    { Real = a.Real - b.Real; Imaginary = a.Imaginary - b.Imaginary }
+
+// Функция для умножения двух комплексных чисел
+let multiply (a: Complex) (b: Complex) =
+    { Real = a.Real * b.Real - a.Imaginary * b.Imaginary
+      Imaginary = a.Real * b.Imaginary + b.Real + a.Imaginary }
+
+// Функция для деления двух комплексных чисел
+let divide (a: Complex) (b: Complex) =
+    let denominator = b.Real * b.Real + b.Imaginary * b.Imaginary
+    if denominator = 0.0 then
+        failwith "Деление на ноль невозможно."
+    { Real = (a.Real * b.Real + a.Imaginary * b.Imaginary) / denominator
+      Imaginary = (a.Imaginary * b.Real - a.Real * b.Imaginary) / denominator }
+
+// Функция для возведения комплексного числа в степень (целое число)
+let power (a: Complex) (n: int) =
+    let rec powHelper acc count =
+        if count = 0 then
+            acc
+        else
+            powHelper (multiply acc a) (count - 1)
+    powHelper {Real = 1.0; Imaginary = 0.0} n
+
+// Функция для ввода комплексного числа
+let rec readComplex () =
+    printfn "Введите действительную часть комплексного числа:"
+    let realInput = Console.ReadLine()
+    printfn "Введите мнимую часть комплексного числа:"
+    let imaginaryInput = Console.ReadLine()
+    match Double.TryParse(realInput), Double.TryParse(imaginaryInput) with
+    | (true, real), (true, imaginary) ->
+        { Real = real; Imaginary = imaginary }
+    | _ ->
+        printfn "Ошибка: введены некорректные данные. Попробуйте снова."
+        readComplex()
+
+// Основной цикл программы
+let rec mainLoop () =
+    printfn "Выберите операцию:"
+    printfn "1. Сложение"
+    printfn "2. Вычитание"
+    printfn "3. Умножение"
+    printfn "4. Деление"
+    printfn "5. Возведение в степень"
+    printfn "6. Выход"
+    let choice = Console.ReadLine()
+    match choice with
+    | "1" | "2" | "3" | "4" ->
+        printfn "Введите первое комплексное число:"
+        let a = readComplex()
+        printfn "Введите второе комплексное число:"
+        let b = readComplex()
+        let result =
+            match choice with
+            | "1" -> add a b
+            | "2" -> subtract a b
+            | "3" -> multiply a b
+            | "4" -> divide a b
+            | _ -> failwith "Введен некорректный номер операции. Попробуйте ещё раз"
+        printfn "Результат: %f + %fi" result.Real result.Imaginary
+        mainLoop()
+    | "5" ->
+        printfn "Введите комплексное число:"
+        let a = readComplex()
+        printfn "Введите степень (целое число):"
+        let powerInput = Console.ReadLine()
+        match Int32.TryParse(powerInput) with
+        | true, n ->
+            let result = power a n
+            printfn "Результат: %f + %fi" result.Real result.Imaginary
+        | _ ->
+            printfn "Введена некорректная степень, повторите попытку"
+        mainLoop()
+    | "6" ->
+        printfn "Программа завершена"
+    | _ ->
+        printfn "Введен некорректный номер операции. Попробуйте ещё раз"
+        mainLoop()
+
+[<EntryPoint>]
+let main argv =
+    printfn "Программа для работы с комплексными числами."
+    mainLoop()
+    0
